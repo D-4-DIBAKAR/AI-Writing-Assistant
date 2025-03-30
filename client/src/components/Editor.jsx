@@ -17,8 +17,10 @@ const Editor = () => {
      const handleTextChange = (e) => setText(e.target.value);
 
      const handleSentenceSelection = () => {
-          const selection = window.getSelection().toString();
-          if (selection) setSelectedSentence(selection);
+          const selection = window.getSelection().toString().trim();
+          if (selection.length > 0) {
+               setSelectedSentence(selection);
+          }
      };
 
      const rephraseSentence = async () => {
@@ -34,7 +36,8 @@ const Editor = () => {
                          },
                     }
                );
-               setRephrasedSentences(response.data.rephrasedSentences);
+               console.log(response.data);
+               setRephrasedSentences([response.data.correctedText]);
           } catch (error) {
                console.error("Error rephrasing sentence:", error);
           }

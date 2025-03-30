@@ -1,44 +1,48 @@
 const express = require('express');
-const axios = require("axios");
 const grammarCheckRoute = express.Router();
 
 
-
-// grammarCheck route
 grammarCheckRoute.post('/', async (req, res) => {
      const { text } = req.body;
      try {
-          console.log("API Called in grammarCheckRoute");
-          const response = await axios.post("https://api.openai.com/v1/chat/completions", {
-               "model": "gpt-4o-mini",
-               "messages": [
-                    {
-                         "role": "system",
-                         "content": "You are a helpful assistant that checks and corrects grammar errors in the following text.Only return the corrected text without any additional comments or context."
-                    },
-                    {
-                         "role": "user",
-                         "content": `Rephrase this sentence: ${text}`
-                    },
-               ],
-               "max_tokens": 150,
-               n: 1,
-               stop: null,
-               temperature: 0.7,
-          }, {
+          const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+               method: "POST",
                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-               }
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "HTTP-Referer": "http://localhost:5173",
+                    "X-Title": "Local Host",
+                    "Content-Type": "application/json"
+               },
+               body: JSON.stringify({
+                    "model": "qwen/qwen2.5-vl-32b-instruct:free",
+                    "messages": [
+                         {
+                              "role": "user",
+                              "content": [
+                                   {
+                                        "type": "text",
+                                        "text": `You are a helpful assistant that checks and corrects grammar errors in the following text. Only return the corrected text without any additional comments or context.\n\n${text}`
+                                   }
+                              ]
+                         }
+                    ]
+               })
           });
 
-          const correctedText = response.data.choices[0].message.content;
-          res.status(200).json(correctedText || []);
+
+          const responseBody = await response.text();
+          console.log(responseBody);
+
+
+          const data = JSON.parse(responseBody);
+          const correctedText = data?.choices?.[0]?.message?.content || "No response";
+
+          res.status(200).json({ correctedText });
+
      } catch (error) {
-          console.error(error);
+          console.error("Error:", error.message);
           res.status(500).json({ error: error.message });
      }
-
 });
 
 module.exports = grammarCheckRoute;
