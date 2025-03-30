@@ -37,6 +37,8 @@ An AI-powered writing assistant that enhances writing with **Grammar Check, Spel
 
 ![Screenshot 2025-03-29 020417](https://github.com/user-attachments/assets/1574b600-29ce-4ea3-aa83-2a38921eb18c)
 ![Screenshot 2025-03-29 020400](https://github.com/user-attachments/assets/ccba5002-bdb5-4da0-abb8-b8c9f4ef5e81)
+![localhost_5173](https://github.com/user-attachments/assets/a12f4ee4-6f65-43ae-8c8b-10904e0f8c7d)
+
 
 
 ---
